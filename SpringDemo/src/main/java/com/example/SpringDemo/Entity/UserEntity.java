@@ -22,7 +22,7 @@ public class UserEntity {
     @Column(nullable=false)
     private String name;
     @Column(nullable=false,unique=true)
-    private String email;
+    private Long number;
     @Column(nullable=false)
     private String password;
     @OneToMany(mappedBy="user",cascade=CascadeType.ALL,orphanRemoval=true)

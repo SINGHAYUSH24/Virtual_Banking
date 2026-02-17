@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringDemo.Service.UserService;
+import com.example.SpringDemo.dto.CreateUserRequest;
 import com.example.SpringDemo.dto.Login;
-import com.example.SpringDemo.dto.User;
-import com.example.SpringDemo.dto.UserRequest;
+import com.example.SpringDemo.dto.UserData;
+
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserControllers{
@@ -23,24 +25,23 @@ public class UserControllers{
         this.service=service;
     }
 @PostMapping("/signup")
-public ResponseEntity<?> createUser(@RequestBody UserRequest user){
-    User saved=service.createUser(user);
+public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest user){
+    UserData saved=service.createUser(user);
     return ResponseEntity.status(201).body(saved);
 }
 @PostMapping("/login")
-public ResponseEntity<?> Login(@RequestBody Login user){
-    System.out.println(user.getRole());
+public ResponseEntity<?> Login(@Valid @RequestBody Login user){
     service.CredentialsMatch(user);
     return ResponseEntity.ok("Login Successful");
 }
 @GetMapping("/all")
 public ResponseEntity<?> getAll(){
-    List<User> users=service.find();
+    List<UserData> users=service.find();
     return ResponseEntity.ok(users);
 }
 @PutMapping("/update")
-public ResponseEntity<?> update(@RequestBody User data){
-    User user=service.updatedata(data);
+public ResponseEntity<?> update(@Valid @RequestBody UserData data){
+    UserData user=service.updatedata(data);
     return ResponseEntity.ok(user);
 }
 @DeleteMapping("/delete/{id}")

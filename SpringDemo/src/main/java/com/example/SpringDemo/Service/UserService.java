@@ -6,13 +6,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringDemo.Entity.UserEntity;
-import com.example.SpringDemo.Exception.NoDataException;
 import com.example.SpringDemo.Exception.InvalidCredentialException;
+import com.example.SpringDemo.Exception.NoDataException;
 import com.example.SpringDemo.Mapper.UserMapper;
 import com.example.SpringDemo.Repository.UserRepository;
 import com.example.SpringDemo.dto.Login;
-import com.example.SpringDemo.dto.User;
-import com.example.SpringDemo.dto.UserRequest;
+import com.example.SpringDemo.dto.UserData;
+import com.example.SpringDemo.dto.CreateUserRequest;
 
 import jakarta.transaction.Transactional;
 @Service
@@ -25,9 +25,9 @@ public class UserService {
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
     }
-    public User createUser(UserRequest request){
-        if(repo.existsByEmail(request.getEmail())){
-           throw new InvalidCredentialException("Email already registered");
+    public UserData createUser(CreateUserRequest request){
+        if(repo.existsByNumber(request.getNumber())){
+           throw new InvalidCredentialException("Mobile Number already registered");
         }
         UserEntity entity= mapper.toEntity(request);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
@@ -35,9 +35,9 @@ public class UserService {
         return mapper.todto(saved);
     }
     public void CredentialsMatch(Login cred){
-        Optional<UserEntity> data=repo.findByEmail(cred.getEmail());
+        Optional<UserEntity> data=repo.findByNumber(cred.getNumber());
         if(data.isEmpty()){
-            throw new InvalidCredentialException("Email not Registered");
+            throw new InvalidCredentialException("Mobile Number not Registered");
         }
         UserEntity user=data.get();
         boolean match=passwordEncoder.matches(cred.getPassword(),user.getPassword());
@@ -45,7 +45,7 @@ public class UserService {
             throw new InvalidCredentialException("Invalid Password");
         }
     }
-    public List<User> find(){
+    public List<UserData> find(){
         List<UserEntity> users=repo.findAll();
         if(users.isEmpty()){
             throw new NoDataException("No Data Found");
@@ -53,13 +53,13 @@ public class UserService {
         return users.stream().map(mapper::todto).toList();
     }
     @Transactional
-    public User updatedata(User data){
+    public UserData updatedata(UserData data){
         UserEntity entity=repo.findById(data.getId());
         if(entity==null){
             throw new InvalidCredentialException("User Not Found");
         }
         entity.setName(data.getName());
-        entity.setEmail(data.getEmail());
+        entity.setNumber(data.getNumber());
         return mapper.todto(entity);
     }
     @Transactional

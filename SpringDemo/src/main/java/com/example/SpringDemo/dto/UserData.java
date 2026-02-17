@@ -1,16 +1,14 @@
 package com.example.SpringDemo.dto;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
 @Data
-public class Login {
+public class UserData{
+    public int id;
+    @NotBlank(message="Name cannot be Empty")
+    public String name;
     @NotNull(message="Mobile Number cannot be empty")
     @Min(value=1000000000,message="Mobile Number must be 10 digits")
-    private Long number;
-    @NotBlank(message="Password not found")
-    @Min(value=5,message="Password must be 5 characters long")
-    private String password;
+    public Long Number;
 }

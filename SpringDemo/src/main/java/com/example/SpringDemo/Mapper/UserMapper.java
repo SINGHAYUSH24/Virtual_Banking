@@ -3,22 +3,22 @@ package com.example.SpringDemo.Mapper;
 import org.springframework.stereotype.Component;
 
 import com.example.SpringDemo.Entity.UserEntity;
-import com.example.SpringDemo.dto.User;
-import com.example.SpringDemo.dto.UserRequest;
+import com.example.SpringDemo.dto.UserData;
+import com.example.SpringDemo.dto.CreateUserRequest;
 @Component
 public class UserMapper {
-    public UserEntity toEntity(UserRequest user){
+    public UserEntity toEntity(CreateUserRequest user){
         UserEntity entity=new UserEntity();
         entity.setName(user.getName());
-        entity.setEmail(user.getEmail());
+        entity.setNumber(user.getNumber());
         entity.setPassword(user.getPassword());
         return entity;
     }
-    public User todto(UserEntity entity){
-        User user=new User();
+    public UserData todto(UserEntity entity){
+        UserData user=new UserData();
         user.setId(entity.getId());
         user.setName(entity.getName());
-        user.setEmail(entity.getEmail());
+        user.setNumber(entity.getNumber());
         return user;
     }
     
