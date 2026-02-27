@@ -1,6 +1,5 @@
 package com.example.SpringDemo.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +11,4 @@ import com.example.SpringDemo.Entity.AccountEntity;
 public interface AccountRepository extends JpaRepository<AccountEntity,Integer> {
     Optional<AccountEntity> findById(Long id);
     void deleteById(Long id);
-    @Override
-    List<AccountEntity> findAll();
 }

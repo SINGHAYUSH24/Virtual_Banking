@@ -1,4 +1,7 @@
 package com.example.SpringDemo.dto;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,5 +13,6 @@ public class UserData{
     public String name;
     @NotNull(message="Mobile Number cannot be empty")
     @Min(value=1000000000,message="Mobile Number must be 10 digits")
-    public Long Number;
+    public Long number;
+    private List<AccountsData> accounts=new ArrayList<>();
 }

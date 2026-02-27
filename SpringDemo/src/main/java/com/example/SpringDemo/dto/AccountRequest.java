@@ -1,6 +1,4 @@
 package com.example.SpringDemo.dto;
-
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,9 +6,8 @@ import lombok.Data;
 
 @Data
 public class AccountRequest {
-    @NotNull(message="Account Number is Empty")
-    @Min(value=100000000000L,message="Account Number is a 12-digit Number")
-    @Max(value=999999999999L,message="Account Number is a 12-digit Number")
+    @NotNull(message="Mobile Number is Empty")
+    @Min(value=100000000,message="Mobile number contain 10 digits")
     private Long number;
     @Min(value=1000,message="Minimum Allowed Balance is Rs.1000")
     private double balance;

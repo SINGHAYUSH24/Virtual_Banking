@@ -1,7 +1,6 @@
 package com.example.SpringDemo.Mapper;
 
 import org.springframework.stereotype.Component;
-
 import com.example.SpringDemo.Entity.UserEntity;
 import com.example.SpringDemo.dto.UserData;
 import com.example.SpringDemo.dto.CreateUserRequest;
@@ -20,6 +19,5 @@ public class UserMapper {
         user.setName(entity.getName());
         user.setNumber(entity.getNumber());
         return user;
-    }
-    
+    } 
 }

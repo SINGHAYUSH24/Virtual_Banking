@@ -7,34 +7,36 @@ import org.springframework.stereotype.Component;
 
 import com.example.SpringDemo.Entity.AccountEntity;
 import com.example.SpringDemo.Entity.TransactionEntity;
+import com.example.SpringDemo.Repository.TransactionRepository;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
 import com.example.SpringDemo.dto.Transaction;
 @Component
 public class AccountMapper {
+    private final TransactionRepository repo;
+    public AccountMapper(TransactionRepository repo){
+        this.repo=repo;
+    }
     public Transaction toTransaction(TransactionEntity trans){
         Transaction tr=new Transaction();
         tr.setId(trans.getId());
         tr.setAmount(trans.getAmount());
-        tr.setType(trans.getType());
-        tr.setAccount_id(trans.getAccount().getId());
         tr.setCreatedAt(trans.getCreatedAt());
-        tr.setOther_id(trans.getOther_id());
+        tr.setSenderid(trans.getSenderid());
+        tr.setReceiverid(trans.getReceiverid());
         return tr;
     }
     public AccountResponse todto(AccountEntity entity){
         AccountResponse response=new AccountResponse();
-        AccountMapper map=new AccountMapper();
         response.setId(entity.getId());
         response.setBalance(entity.getBalance());
-        List<Transaction> transactions=entity.getTransactions().stream().map(item->map.toTransaction(item)).collect(Collectors.toList());
-        response.setTransactions(transactions);
+        List<Transaction> list=repo.findBySenderidOrReceiverid(entity.getId(), entity.getId()).stream().map(item->toTransaction(item)).collect(Collectors.toList());
+        response.setTransactions(list);
         return response;
     }
-    public AccountsData toData(AccountEntity account){
-        AccountsData data=new AccountsData();
-        data.setId(account.getId());
-        data.setNumber(account.getUser().getNumber());
-        return data;
+    public AccountsData toResponseAccount(AccountEntity entity){
+        AccountsData account=new AccountsData();
+        account.setId(entity.getId());
+        return account;
     }
 }

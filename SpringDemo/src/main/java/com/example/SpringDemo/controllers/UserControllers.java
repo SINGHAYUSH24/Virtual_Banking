@@ -2,6 +2,8 @@ package com.example.SpringDemo.controllers;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.example.SpringDemo.Security.Jwt;
 import com.example.SpringDemo.Service.UserService;
 import com.example.SpringDemo.dto.CreateUserRequest;
 import com.example.SpringDemo.dto.Login;
@@ -21,8 +23,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/user")
 public class UserControllers{
     private final UserService service;
-    public UserControllers(UserService service){
+    private final AuthenticationManager authManager;
+    private final Jwt jwt;
+    public UserControllers(UserService service,AuthenticationManager authManager,Jwt jwt){
         this.service=service;
+        this.authManager=authManager;
+        this.jwt=jwt;
     }
 @PostMapping("/signup")
 public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest user){
@@ -30,13 +36,18 @@ public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest user){
     return ResponseEntity.status(201).body(saved);
 }
 @PostMapping("/login")
-public ResponseEntity<?> Login(@Valid @RequestBody Login user){
-    service.CredentialsMatch(user);
-    return ResponseEntity.ok("Login Successful");
+public String Login(@Valid @RequestBody Login user){
+    authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getNumber(),user.getPassword()));
+    return jwt.generateToken(user.getNumber());
+}
+@GetMapping("/profile")
+public UserData getUserData(){
+    UserData user=service.getUserData();
+    return user;
 }
 @GetMapping("/all")
 public ResponseEntity<?> getAll(){
-    List<UserData> users=service.find();
+    List<UserData> users=service.findAll();
     return ResponseEntity.ok(users);
 }
 @PutMapping("/update")

@@ -1,5 +1,6 @@
 package com.example.SpringDemo.Exception;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,10 @@ public class GlobalException {
         return ResponseEntity.status(400).body(response);
     }
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<String> InvalidCredential(InvalidCredentialException e){
-        return ResponseEntity.status(400).body(e.getMessage());
+    public ResponseEntity<List<String>> InvalidCredential(InvalidCredentialException e){
+        List<String> arr=new ArrayList<>();
+        arr.add(e.getMessage());
+        return ResponseEntity.status(400).body(arr);
     }
     @ExceptionHandler(NoDataException.class)
     public ResponseEntity<String> NoData(NoDataException e){

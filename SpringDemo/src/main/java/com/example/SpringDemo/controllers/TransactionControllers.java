@@ -22,9 +22,10 @@ public class TransactionControllers {
         this.service=service;
     }
     @PostMapping("/new")
-    public ResponseEntity<String> addTransaction(@RequestBody TransactionRequest transaction){
-        int response=service.addTransaction(transaction);
-        return ResponseEntity.status(201).body("Payment with Id: "+response+" Successful");
+    public ResponseEntity<Transaction> addTransaction(@RequestBody TransactionRequest transaction){
+        System.out.println("EndPoint Hit");
+        Transaction response=service.addTransaction(transaction);
+        return ResponseEntity.status(201).body(response);
     }
     @GetMapping("/history/{id}")
     public ResponseEntity<List<Transaction>> getTransaction(@PathVariable Long id){

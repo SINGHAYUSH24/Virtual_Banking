@@ -1,18 +1,23 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import styles from '../assets/Signup.module.css';
 import { useNavigate } from 'react-router';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const Signup = () => {
+function Signup (){
     const navigate=useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    password: '',
-    role:'user'
+    number: '',
+    password: ''
   });
   const [errors, setErrors] = useState({});
+  useEffect(()=>{
+        const token=localStorage.getItem("token");
+        if(token){
+            navigate("/dashboard");
+        }
+    },[]);
   const validateForm = () => {
     const newErrors = {};
     
@@ -22,12 +27,10 @@ const Signup = () => {
       newErrors.name = 'Name must be less than 100 characters';
     }
     
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!formData.email.match(/^[a-zA-Z0-9]+@[a-zA-Z]+\.[a-z]+$/)) {
-      newErrors.email = 'Please enter a valid email';
+    if (formData.number.trim().length!=10) {
+      console.log(formData.number.trim().length);
+      newErrors.number = '10-digit mobile Number is required';
     }
-    
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 5) {
@@ -59,7 +62,7 @@ const Signup = () => {
         const res=await axios.post(`http://localhost:9090/user/signup`,formData);
         const data=res.data;
         toast.success(`User ${data.name} created`);
-        setFormData({name:'',email:'',password:'',role:'user'});
+        setFormData({name:'',number:'',password:''});
     }catch(err){
         toast.error(err.response.data);
     }
@@ -90,17 +93,17 @@ const Signup = () => {
           </div>
           
           <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>Enter Email Address</label>
+            <label htmlFor="number" className={styles.label}>Enter Mobile Number</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="number"
+              name="number"
+              value={formData.number}
               onChange={handleChange}
-              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-              placeholder="Enter Valid Email"
+              className={`${styles.input} ${errors.number ? styles.inputError : ''}`}
+              placeholder="Enter Valid Mobile Number"
             />
-            {errors.email && <span className={styles.error}>{errors.email}</span>}
+            {errors.number&& <span className={styles.error}>{errors.number}</span>}
           </div>
           
           <div className={styles.inputGroup}>

@@ -20,7 +20,6 @@ import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
 import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.TransactionRequest;
-import com.example.SpringDemo.enums.TransactionEnum;
 
 import jakarta.transaction.Transactional;
 
@@ -40,10 +39,7 @@ public class AccountService {
     }
     @Transactional
     public String createAccount(AccountRequest request){
-        if(repo.findByNumber(request.getNumber()).isEmpty()){
-            throw new InvalidCredentialException("Mobile Number not Registered");
-        }
-        UserEntity user=repo.findByNumber(request.getNumber()).get();
+        UserEntity user=repo.findByNumber(request.getNumber()).orElseThrow(()->new InvalidCredentialException("User Not Found!"));
         AccountEntity account=new AccountEntity();
         account.setBalance(request.getBalance());
         account.setPin(passwordEncoder.encode(request.getPin()));
@@ -65,10 +61,9 @@ public class AccountService {
     public List<AccountsData> getAllAccounts(){
         List<AccountEntity> data=accountRepo.findAll();
         if(data.isEmpty()){
-            throw new NoDataException("No Accounts Found");
+            throw new NoDataException("No Accounts Found!");
         }
-        List<AccountEntity> accounts=data;
-        List<AccountsData> response=accounts.stream().map(account->mapper.toData(account)).collect(Collectors.toList());
+        List<AccountsData> response=data.stream().map(account->mapper.toResponseAccount(account)).collect(Collectors.toList());
         return response;
 
     }
@@ -86,7 +81,8 @@ public class AccountService {
         }   
     }
     @Transactional
-    public int addTransaction(TransactionRequest transaction){
+    public Transaction addTransaction(TransactionRequest transaction){
+        System.out.println("Request Pin :"+transaction.getPin());
         Optional<AccountEntity> account=accountRepo.findById(transaction.getAccount_id());
         if(account.isEmpty()){
             throw new InvalidCredentialException("Bank Account Not Found");
@@ -97,29 +93,24 @@ public class AccountService {
         }
         AccountEntity sender=account.get();
         AccountEntity receiver=receiverEntity.get();
+        if(!passwordEncoder.matches(transaction.getPin().trim(),sender.getPin())){
+            throw new InvalidCredentialException("UPI Pin is Incorrect");
+        }
         sender.setBalance(sender.getBalance()-transaction.getAmount());
         receiver.setBalance(receiver.getBalance()+transaction.getAmount());
         TransactionEntity entity=new TransactionEntity();
-        TransactionEntity entity2=new TransactionEntity();
-        entity.setAccount(sender);
         entity.setAmount(transaction.getAmount());
-        entity.setType(TransactionEnum.DEBIT);
-        entity.setOther_id(transaction.getReceiver_id());
-        entity2.setAccount(receiver);
-        entity2.setAmount(transaction.getAmount());
-        entity2.setType(TransactionEnum.CREDIT);
-        entity2.setOther_id(transaction.getAccount_id());
+        entity.setSenderid(transaction.getAccount_id());
+        entity.setReceiverid(transaction.getReceiver_id());
         tRepo.saveAndFlush(entity);
-        tRepo.saveAndFlush(entity2);
-        return entity.getId();
+        return mapper.toTransaction(entity);
     }
     public List<Transaction> getTransactions(Long id){
         Optional<AccountEntity> response=accountRepo.findById(id);
         if(response.isEmpty()){
             throw new InvalidCredentialException("Bank Account Not Found");
         }
-        AccountEntity account=response.get();
-        List<TransactionEntity> transactions=account.getTransactions();
+        List<TransactionEntity> transactions=tRepo.findBySenderidOrReceiverid(id,id);
         List<Transaction> data=transactions.stream().map(item->mapper.toTransaction(item)).collect(Collectors.toList());
         return data;
     }
