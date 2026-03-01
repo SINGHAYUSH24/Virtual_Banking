@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringDemo.Service.AccountService;
+import com.example.SpringDemo.dto.AccountBalanceRequest;
+import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
@@ -42,6 +44,11 @@ public class AccountControllers {
     public ResponseEntity<AccountResponse> getAccountById(@PathVariable Long id){
         AccountResponse data=service.getAccount(id);
         return ResponseEntity.ok(data);
+    }
+    @PostMapping("/balance")
+    public ResponseEntity<AccountBalanceResponse> getBalance(@RequestBody AccountBalanceRequest request){
+        return ResponseEntity.ok(service.getBalance(request));
+
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> removeAccount(@PathVariable Long id){

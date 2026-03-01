@@ -9,6 +9,7 @@ import Dashboard from './Components/dashboard'
 import BankAccount from './Components/BankAccount'
 import Bill from './Components/Bill'
 import NumberTransaction from './Components/NumberTransaction'
+import BalanceCheck from './Components/BalanceCheck'
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
       <Route path="/bank" element={<BankAccount/>}></Route>
       <Route path="/bill" element={<Bill/>}></Route>
       <Route path="/payment" element={<NumberTransaction/>}></Route>
+      <Route path="/balance" element={<BalanceCheck/>}></Route>
     </Routes>
     </BrowserRouter>
   )

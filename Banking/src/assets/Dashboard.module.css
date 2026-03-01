@@ -116,7 +116,7 @@
   min-width: 280px;
   padding: 1.5rem;
   border-radius: 0.75rem;
-  background: linear-gradient(145deg, hsl(220, 55%, 22%), hsl(230, 50%, 30%));
+  background: linear-gradient(145deg, hsl(220, 55%, 22%), hsl(231, 36%, 45%));
   color: hsl(210, 40%, 98%);
   box-shadow: 0 8px 32px -8px hsla(220, 30%, 10%, 0.12);
   scroll-snap-align: start;

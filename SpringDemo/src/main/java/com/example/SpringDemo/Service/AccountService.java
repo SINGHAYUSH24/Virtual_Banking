@@ -15,6 +15,8 @@ import com.example.SpringDemo.Mapper.AccountMapper;
 import com.example.SpringDemo.Repository.AccountRepository;
 import com.example.SpringDemo.Repository.TransactionRepository;
 import com.example.SpringDemo.Repository.UserRepository;
+import com.example.SpringDemo.dto.AccountBalanceRequest;
+import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
@@ -117,6 +119,13 @@ public class AccountService {
     public AccountResponse getAccount(Long id){
         AccountEntity account=accountRepo.findById(id).orElseThrow(()->new InvalidCredentialException("Bank Account not Found"));
         AccountResponse response=mapper.todto(account);
+        return response;
+    }
+    public AccountBalanceResponse getBalance(AccountBalanceRequest request){
+        AccountEntity account=accountRepo.findById(request.getId()).orElseThrow(()->new InvalidCredentialException("Bank Account Not Found"));
+        AccountBalanceResponse response=new AccountBalanceResponse();
+        response.setId(account.getId());
+        response.setBalance(account.getBalance());
         return response;
     }
 }
