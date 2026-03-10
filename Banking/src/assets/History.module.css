@@ -1,0 +1,229 @@
+.container {
+  max-width: 1200px;
+  width:100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1a1a2e;
+}
+.btn{
+    padding:5px 10px;
+    position:absolute;
+    top:10px;
+    left:10px;
+    background-color: #b61b03;
+    color:#d0d5dd;
+    border:5px solid #b61b03;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.btn:hover{
+    color:black;
+}
+.select{
+    border:2px solid gray;
+    padding:5px 10px;
+    border-radius: 10px;
+    margin-bottom:10px;
+}
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a4a6a;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+  margin-left:5px;
+}
+
+.accountGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-bottom: 2rem;
+}
+
+.accountBtn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid #d0d5dd;
+  background: #fff;
+  color: #344054;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.accountBtn:hover {
+  border-color: #371ba4;
+  color: #371ba4;
+  box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.08);
+}
+
+.accountBtnActive {
+  composes: accountBtn;
+  background: #371ba4;
+  color: #fff;
+  border-color: #371ba4;
+}
+
+.accountBtnActive:hover {
+  background: #371ba4;
+  border-color: #371ba4;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.18);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.accountBadge {
+  background: #f0edff;
+  color: #7c5cfc;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tableWrapper {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e8e8ef;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #0b0e0f;
+  color:white;
+}
+
+.table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e8e8ef;
+}
+
+.table td {
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  color: #344054;
+  border-bottom: 1px solid #f2f2f7;
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #fafaff;
+}
+
+.txDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.txPrimary {
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.txSecondary {
+  font-size: 0.75rem;
+  color: black;
+}
+
+.amount {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #1a1a2e;
+}
+
+.debit {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #fef3f2;
+  color: #d92d20;
+}
+.credit {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #fef3f2;
+  color: #180ca2;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.pageBtn {
+  padding: 0.45rem 1.1rem;
+  border-radius: 8px;
+  border: 1.5px solid #d0d5dd;
+  background: #fff;
+  color: #344054;
+  font-size: 0.825rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pageBtn:hover:not(:disabled) {
+  border-color: #7c5cfc;
+  color: #7c5cfc;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.8rem;
+  color: #8a8aa3;
+  font-weight: 500;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #8a8aa3;
+  font-size: 0.95rem;
+}

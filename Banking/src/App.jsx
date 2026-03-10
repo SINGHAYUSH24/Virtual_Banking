@@ -5,11 +5,12 @@ import './App.css'
 import Login from './Components/Login'
 import {BrowserRouter,Routes,Route} from "react-router";
 import Signup from './Components/Signup'
-import Dashboard from './Components/dashboard'
+import Dashboard from './Components/Dashboard'
 import BankAccount from './Components/BankAccount'
 import Bill from './Components/Bill'
 import NumberTransaction from './Components/NumberTransaction'
 import BalanceCheck from './Components/BalanceCheck'
+import History from './Components/History'
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ function App() {
       <Route path="/bill" element={<Bill/>}></Route>
       <Route path="/payment" element={<NumberTransaction/>}></Route>
       <Route path="/balance" element={<BalanceCheck/>}></Route>
+      <Route path="/history" element={<History/>}></Route>
     </Routes>
     </BrowserRouter>
   )

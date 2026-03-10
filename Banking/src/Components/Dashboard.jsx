@@ -1,5 +1,7 @@
 import {useState,useEffect} from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { AccountContext } from "./GlobalAccountContext";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router";
@@ -9,6 +11,7 @@ function Dashboard(){
     const [userAccounts,setAccounts]=useState([]);
     const [transactions,setTransactions]=useState([]);
     const navigate=useNavigate();
+    const {setGlobalAccounts}=useContext(AccountContext);
     useEffect(()=>{
       async function fetchDetails(){
         const token=localStorage.getItem("token");
@@ -25,7 +28,9 @@ function Dashboard(){
             );
             const data=res.data;
             setData({id:data.id,name:data.name,number:data.number,accounts:data.accounts});
-            data.accounts.forEach(account=>(setAccounts(prev=>([...prev,account.id]))));
+            const accountIds = data.accounts.map(acc => acc.id);
+            setAccounts(accountIds);       
+            setGlobalAccounts(accountIds);
             const response=await axios.get(`http://localhost:9090/account/all/${data.number}`,
                 {
                     headers:{
@@ -61,6 +66,10 @@ function Dashboard(){
   }).format(date);
   return `${time} on ${day}`;
   }
+  const handleLogout=()=>{
+    localStorage.clear("token");
+    navigate("/");
+  }
     return (
     <div className={styles.dashboardWrapper}>
       <nav className={styles.navbar}>
@@ -71,9 +80,7 @@ function Dashboard(){
             }
             Profile
           </button>
-          <button className={styles.logoutBtn}>
-            {//<LogOut size={16} />
-            }
+          <button className={styles.logoutBtn} onClick={handleLogout}>
             Logout
           </button>
         </div>
@@ -101,25 +108,16 @@ function Dashboard(){
               Mobile Number </button>
             <button className={styles.actionCard} onClick={()=>{navigate("/balance",{state:{data:data}})}}>
               <svg width="64px" height="64px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <defs><style>{`
-        .a {
-          fill: none;
-          stroke: #000000;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-        }
-        .b {
-          fill: #000000;
-        }
-      `}
-    </style>
-  </defs>
+              <defs><style>{`.a { fill: none;stroke: #000000;stroke-linecap: round;stroke-linejoin: round;}
+                             .b { fill: #000000;}`}
+                    </style>
+              </defs>
   <path className="a" d="M8.0723,20.7261a12.4759,12.4759,0,0,1,3.6466-5.6695c-.9317-.7453,0-5.3767,0-5.3767s3.7264,1.65,4.3918,2.4221c0,0,2.8747-3.4868,11.2059-3.4868S43.5,15.0566,43.5,23.654s-6.2285,11.339-6.2285,11.339a19.9775,19.9775,0,0,1-1.4905,4.3918H32.48A21.3853,21.3853,0,0,1,31.07,36.8562s-2.6351.3194-4.525.3194a23.0513,23.0513,0,0,1-3.966-.4259,6.4031,6.4031,0,0,1-.9316,2.6351H18.0538c-1.1179-.9582-1.6769-3.9659-1.6769-3.9659S7.327,31.32,5.4105,28.871c-1.038-1.9431-.905-6.2551-.905-6.2551A7.9406,7.9406,0,0,1,8.0723,20.7261Z"/>
   <path className="a" d="M19.5444,13.7789a11.5482,11.5482,0,0,1,7.3464-2.156,13.1871,13.1871,0,0,1,7.9852,2.5287"/>
   <circle className="b" cx="11.6124" cy="21.285" r="0.75" />
 </svg>
               Check Balance</button>
-            <button className={styles.actionCard}>
+            <button className={styles.actionCard} onClick={()=>{navigate("/history")}}>
               <svg fill="#000000" width="64px" height="64px" viewBox="0 0 512 512" id="_x30_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M256,0C114.615,0,0,114.615,0,256s114.615,256,256,256s256-114.615,256-256S397.385,0,256,0z M366.364,366.309 c-60.922,60.921-159.695,60.921-220.617,0c-30.342-30.342-45.572-70.073-45.691-109.841c-0.04-13.453,10.696-24.72,24.149-24.841 c13.565-0.123,24.601,10.837,24.601,24.374h0.05c0,27.464,10.454,54.929,31.363,75.837c41.817,41.817,109.857,41.817,151.674,0 c41.986-41.985,41.986-109.69,0-151.675c-41.817-41.817-109.857-41.816-151.674,0l0,0c7.367,7.367,3.551,19.973-6.666,22.016 l-43.089,8.618c-9.128,1.826-17.176-6.222-15.35-15.35l8.618-43.089c2.043-10.217,14.649-14.033,22.016-6.666v0 c60.922-60.922,159.695-60.922,220.617,0C427.137,206.463,427.137,305.537,366.364,366.309z M305.26,263.299 c8.744,5.048,11.74,16.229,6.691,24.973v0c-5.048,8.744-16.229,11.74-24.973,6.691l-40.064-23.131l0.001-0.002 c-5.463-3.161-9.142-9.064-9.142-15.83v-64.543c0-10.096,8.185-18.281,18.281-18.281h0c10.096,0,18.281,8.185,18.281,18.281v53.989 L305.26,263.299z"></path></g></svg>
               Transaction History</button>
           </div>

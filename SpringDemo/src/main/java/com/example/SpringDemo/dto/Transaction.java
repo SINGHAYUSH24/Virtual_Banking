@@ -9,5 +9,6 @@ public class Transaction{
     private Long senderid;
     private LocalDateTime createdAt;
     private Long receiverid;
+    private String senderName;
     private String receiverName;
 }

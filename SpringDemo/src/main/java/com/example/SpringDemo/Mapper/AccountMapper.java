@@ -24,6 +24,8 @@ public class AccountMapper {
         tr.setCreatedAt(trans.getCreatedAt());
         tr.setSenderid(trans.getSenderid());
         tr.setReceiverid(trans.getReceiverid());
+        tr.setSenderName(trans.getSenderName());
+        tr.setReceiverName(trans.getReceiverName());
         return tr;
     }
     public AccountResponse todto(AccountEntity entity){

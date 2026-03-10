@@ -3,6 +3,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -104,16 +108,19 @@ public class AccountService {
         entity.setAmount(transaction.getAmount());
         entity.setSenderid(transaction.getAccount_id());
         entity.setReceiverid(transaction.getReceiver_id());
+        entity.setSenderName(sender.getUser().getName());
+        entity.setReceiverName(receiver.getUser().getName());
         tRepo.saveAndFlush(entity);
         return mapper.toTransaction(entity);
     }
-    public List<Transaction> getTransactions(Long id){
+    public Page<Transaction> getTransactions(Long id,int page,int size){
         Optional<AccountEntity> response=accountRepo.findById(id);
         if(response.isEmpty()){
             throw new InvalidCredentialException("Bank Account Not Found");
         }
-        List<TransactionEntity> transactions=tRepo.findBySenderidOrReceiverid(id,id);
-        List<Transaction> data=transactions.stream().map(item->mapper.toTransaction(item)).collect(Collectors.toList());
+        Pageable pageable=PageRequest.of(page,size,Sort.by("createdAt").descending());
+        Page<TransactionEntity> transactions=tRepo.findBySenderidOrReceiverid(id,id,pageable);
+        Page<Transaction> data=transactions.map(item->mapper.toTransaction(item));
         return data;
     }
     public AccountResponse getAccount(Long id){

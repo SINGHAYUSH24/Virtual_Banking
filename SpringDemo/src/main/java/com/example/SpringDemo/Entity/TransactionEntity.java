@@ -25,6 +25,10 @@ public class TransactionEntity{
     private Long senderid;
     @Column(nullable=false)
     private Long receiverid;
+    @Column(nullable=false)
+    private String senderName;
+    @Column(nullable=false)
+    private String receiverName;
     @PrePersist
     void createTimestamp(){
         createdAt=LocalDateTime.now();
