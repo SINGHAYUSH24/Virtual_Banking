@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+  background-color: #F5F5F5;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+.wrapper {
+  width: 100%;
+  max-width: 400px;
+  background-color: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.accountList {
+  max-height: 220px;
+  overflow-y: auto;
+  border-bottom: 1px solid #EAEAEA;
+}
+.accountList::-webkit-scrollbar {
+  width: 6px;
+}
+.accountList::-webkit-scrollbar-track {
+  background: transparent;
+}
+.accountList::-webkit-scrollbar-thumb {
+  background-color: #EAEAEA;
+  border-radius: 3px;
+}
+.accountItem {
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background-color 200ms ease-out;
+  border-bottom: 1px solid #EAEAEA;
+}
+.accountItem:last-child {
+  border-bottom: none;
+}
+.accountItem:hover {
+  background-color: #FAFAFA;
+}
+.active {
+  background-color: #EAEAEA;
+}
+.accountId {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: #111111;
+  word-break: break-all;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.emptyState {
+  padding: 48px 24px;
+  text-align: center;
+  color: #888888;
+  font-size: 14px;
+}
+.qrDisplay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  min-height: 240px;
+}
+.qrPlaceholder {
+  text-align: center;
+  color: #888888;
+}
+.qrPlaceholder p {
+  margin: 0;
+  font-size: 14px;
+  max-width: 160px;
+}
+.qrCodeWrapper {
+  animation: fadeIn 200ms ease-out forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

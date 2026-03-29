@@ -11,6 +11,7 @@ import Bill from './Components/Bill'
 import NumberTransaction from './Components/NumberTransaction'
 import BalanceCheck from './Components/BalanceCheck'
 import History from './Components/History'
+import QRGenerator from './Components/QRGenerator'
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ function App() {
       <Route path="/payment" element={<NumberTransaction/>}></Route>
       <Route path="/balance" element={<BalanceCheck/>}></Route>
       <Route path="/history" element={<History/>}></Route>
+      <Route path="/qr" element={<QRGenerator/>}></Route>
     </Routes>
     </BrowserRouter>
   )

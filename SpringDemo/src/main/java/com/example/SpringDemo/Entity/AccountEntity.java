@@ -1,6 +1,10 @@
 package com.example.SpringDemo.Entity;
+import com.example.SpringDemo.enums.MerchantEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +30,12 @@ public class AccountEntity{
     private double balance;
     @Column(nullable=false)
     private String pin;
+    @Column(nullable=false)
+    private String bankname;
+    @Enumerated(EnumType.STRING)
+    private MerchantEnum type=MerchantEnum.NONE;
+    @Column(nullable=false)
+    private String merchant_name="";
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;

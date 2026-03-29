@@ -15,6 +15,7 @@ import com.example.SpringDemo.Entity.TransactionEntity;
 import com.example.SpringDemo.Entity.UserEntity;
 import com.example.SpringDemo.Exception.InvalidCredentialException;
 import com.example.SpringDemo.Exception.NoDataException;
+import com.example.SpringDemo.Map.BankMap;
 import com.example.SpringDemo.Mapper.AccountMapper;
 import com.example.SpringDemo.Repository.AccountRepository;
 import com.example.SpringDemo.Repository.TransactionRepository;
@@ -24,6 +25,7 @@ import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
+import com.example.SpringDemo.dto.MerchantRequest;
 import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.TransactionRequest;
 
@@ -36,12 +38,14 @@ public class AccountService {
     private final AccountMapper mapper;
     private final AccountRepository accountRepo;
     private final TransactionRepository tRepo;
-    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo){
+    private final BankMap bankMap;
+    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo,BankMap bankMap){
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
         this.mapper=mapper;
         this.accountRepo=repoAccount;
         this.tRepo=tRepo;
+        this.bankMap=bankMap;
     }
     @Transactional
     public String createAccount(AccountRequest request){
@@ -49,10 +53,19 @@ public class AccountService {
         AccountEntity account=new AccountEntity();
         account.setBalance(request.getBalance());
         account.setPin(passwordEncoder.encode(request.getPin()));
+        String bankName=bankMap.getBank(request.getBankcode());
+        account.setBankname(bankName);
         account.setUser(user);
         user.getAccounts().add(account);
         repo.saveAndFlush(user);
-        return "Account Created Successfully";
+        return " UPI Account Created Successfully";
+    }
+    public String toMerchant(MerchantRequest request){
+        AccountEntity account=accountRepo.findById(request.getId()).orElseThrow(()->new InvalidCredentialException("Invalid UPI Account"));
+        account.setMerchant_name(request.getName());
+        account.setType(request.getType());
+        accountRepo.saveAndFlush(account);
+        return "Merchant UPI created successfully";
     }
     public List<AccountResponse> getAll(Long number){
         Optional<UserEntity> user=repo.findByNumber(number);

@@ -6,5 +6,6 @@ import lombok.Data;
 public class AccountResponse {
     private Long id;
     private double balance;
+    private String bankName;
     private List<Transaction> transactions;
 }

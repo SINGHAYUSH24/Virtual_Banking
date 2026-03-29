@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.SpringDemo.Service.AccountService;
 import com.example.SpringDemo.dto.AccountBalanceRequest;
 import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.AccountsData;
+import com.example.SpringDemo.dto.MerchantRequest;
 
 @RestController
 @RequestMapping("/account")
@@ -24,6 +24,11 @@ public class AccountControllers {
     private  final AccountService service;
     public AccountControllers(AccountService service){
         this.service=service;   
+    }
+    @PostMapping("/merchant")
+    public ResponseEntity<String> convert(@RequestBody MerchantRequest request){
+        String res=service.toMerchant(request);
+        return ResponseEntity.status(200).body(res);
     }
     @PostMapping("/new")
     public ResponseEntity<String> createAccount(@RequestBody AccountRequest request){

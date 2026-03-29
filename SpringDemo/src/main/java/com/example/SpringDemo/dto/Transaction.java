@@ -11,4 +11,6 @@ public class Transaction{
     private Long receiverid;
     private String senderName;
     private String receiverName;
+    private String category;
+    private String merchantName;
 }

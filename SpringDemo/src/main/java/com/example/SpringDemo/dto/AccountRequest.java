@@ -13,4 +13,6 @@ public class AccountRequest {
     private double balance;
     @Size(min=4,max=4,message="Mobile Banking PIN must be a 4-digit Number")
     private String pin;
+    @NotNull(message="Must Specify the Bank Name")
+    private int bankcode;
 }

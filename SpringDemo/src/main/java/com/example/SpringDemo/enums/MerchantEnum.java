@@ -1,0 +1,25 @@
+package com.example.SpringDemo.enums;
+public enum MerchantEnum {
+    NONE,
+    FOOD_AND_DINING,
+    GROCERIES,
+    MOBILE_RECHARGE,
+    UTILITIES,
+    TRAVEL,
+    SHOPPING,
+    ENTERTAINMENT,
+    HEALTHCARE,
+    EDUCATION,
+    BILL_PAYMENTS,
+    RENT,
+    FUEL,
+    SUBSCRIPTIONS,
+    INSURANCE,
+    INVESTMENTS,
+    PERSONAL_CARE,
+    SERVICES,
+    TRANSPORT,
+    GOVERNMENT,
+    DONATIONS,
+    ECOMMERCE
+}

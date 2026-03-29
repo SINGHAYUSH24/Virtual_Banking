@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,12 @@ public class GlobalException {
     public ResponseEntity<List<String>> ConstraintVoilation(jakarta.validation.ConstraintViolationException e){
         List<String> response=e.getConstraintViolations().stream().map(error->error.getMessage()).collect(Collectors.toList());
         return ResponseEntity.status(400).body(response);
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleInvalidEnum(HttpMessageNotReadableException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body("Invalid value provided. Please check your input.");
     }
     
 }
