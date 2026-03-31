@@ -10,9 +10,8 @@ import com.example.SpringDemo.Entity.AccountEntity;
 import com.example.SpringDemo.Entity.TransactionEntity;
 import com.example.SpringDemo.Exception.InvalidCredentialException;
 import com.example.SpringDemo.Repository.AccountRepository;
-import com.example.SpringDemo.Repository.TransactionRepository;cd
+import com.example.SpringDemo.Repository.TransactionRepository;
 import com.example.SpringDemo.dto.AccountResponse;
-import com.example.SpringDemo.dto.AccountsData;
 import com.example.SpringDemo.dto.Transaction;
 @Component
 public class AccountMapper {
@@ -47,9 +46,11 @@ public class AccountMapper {
         response.setTransactions(list);
         return response;
     }
-    public AccountsData toResponseAccount(AccountEntity entity){
-        AccountsData account=new AccountsData();
+    public AccountResponse toResponseAccount(AccountEntity entity){
+        AccountResponse account=new AccountResponse();
         account.setId(entity.getId());
+        account.setBalance(entity.getBalance());
+        account.setBankName(entity.getBankname());
         return account;
     }
 }

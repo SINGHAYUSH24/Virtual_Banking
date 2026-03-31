@@ -12,6 +12,8 @@ import NumberTransaction from './Components/NumberTransaction'
 import BalanceCheck from './Components/BalanceCheck'
 import History from './Components/History'
 import QRGenerator from './Components/QRGenerator'
+import AccountSettings from "./Components/AccountSettings"
+import Merchant from './Components/Merchant'
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +27,8 @@ function App() {
       <Route path="/balance" element={<BalanceCheck/>}></Route>
       <Route path="/history" element={<History/>}></Route>
       <Route path="/qr" element={<QRGenerator/>}></Route>
+      <Route path="/settings" element={<AccountSettings/>}></Route>
+      <Route path="/merchant" element={<Merchant/>}></Route>
     </Routes>
     </BrowserRouter>
   )

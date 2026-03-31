@@ -13,7 +13,7 @@ import com.example.SpringDemo.Exception.NoDataException;
 import com.example.SpringDemo.Mapper.AccountMapper;
 import com.example.SpringDemo.Mapper.UserMapper;
 import com.example.SpringDemo.Repository.UserRepository;
-import com.example.SpringDemo.dto.AccountsData;
+import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.CreateUserRequest;
 import com.example.SpringDemo.dto.UserData;
 
@@ -51,7 +51,7 @@ public class UserService {
         data.setId(user.getId());
         data.setName(user.getName());
         data.setNumber(user.getNumber());
-        List<AccountsData> arr=user.getAccounts().stream().map(account->acc.toResponseAccount(account)).collect(Collectors.toList());
+        List<AccountResponse> arr=user.getAccounts().stream().map(account->acc.todto(account)).collect(Collectors.toList());
         data.setAccounts(arr);
         return data;
     }

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringDemo.Entity.AccountEntity;
+import com.example.SpringDemo.Entity.MerchantApproval;
 import com.example.SpringDemo.Entity.TransactionEntity;
 import com.example.SpringDemo.Entity.UserEntity;
 import com.example.SpringDemo.Exception.InvalidCredentialException;
@@ -18,13 +19,13 @@ import com.example.SpringDemo.Exception.NoDataException;
 import com.example.SpringDemo.Map.BankMap;
 import com.example.SpringDemo.Mapper.AccountMapper;
 import com.example.SpringDemo.Repository.AccountRepository;
+import com.example.SpringDemo.Repository.MerchantApprovalRepository;
 import com.example.SpringDemo.Repository.TransactionRepository;
 import com.example.SpringDemo.Repository.UserRepository;
 import com.example.SpringDemo.dto.AccountBalanceRequest;
 import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
-import com.example.SpringDemo.dto.AccountsData;
 import com.example.SpringDemo.dto.MerchantRequest;
 import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.TransactionRequest;
@@ -39,13 +40,23 @@ public class AccountService {
     private final AccountRepository accountRepo;
     private final TransactionRepository tRepo;
     private final BankMap bankMap;
-    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo,BankMap bankMap){
+    private final MerchantApprovalRepository merchantRepo;
+    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo,BankMap bankMap,MerchantApprovalRepository merchantApprovalRepository){
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
         this.mapper=mapper;
         this.accountRepo=repoAccount;
         this.tRepo=tRepo;
         this.bankMap=bankMap;
+        this.merchantRepo=merchantApprovalRepository;
+    }
+    public String merchantRequest(MerchantRequest request){
+        MerchantApproval entity=new MerchantApproval();
+        entity.setUserId(request.getId());
+        entity.setCategory(request.getType().toString());
+        entity.setMerchantName(request.getName());
+        merchantRepo.save(entity);
+        return "Your Request for Merchant Account has been sent successfully. ";
     }
     @Transactional
     public String createAccount(AccountRequest request){
@@ -60,13 +71,6 @@ public class AccountService {
         repo.saveAndFlush(user);
         return " UPI Account Created Successfully";
     }
-    public String toMerchant(MerchantRequest request){
-        AccountEntity account=accountRepo.findById(request.getId()).orElseThrow(()->new InvalidCredentialException("Invalid UPI Account"));
-        account.setMerchant_name(request.getName());
-        account.setType(request.getType());
-        accountRepo.saveAndFlush(account);
-        return "Merchant UPI created successfully";
-    }
     public List<AccountResponse> getAll(Long number){
         Optional<UserEntity> user=repo.findByNumber(number);
         if(user.isEmpty()){
@@ -77,12 +81,12 @@ public class AccountService {
         List<AccountResponse> result=accounts.stream().map(account->mapper.todto(account)).collect(Collectors.toList());
         return result;
     }
-    public List<AccountsData> getAllAccounts(){
+    public List<AccountResponse> getAllAccounts(){
         List<AccountEntity> data=accountRepo.findAll();
         if(data.isEmpty()){
             throw new NoDataException("No Accounts Found!");
         }
-        List<AccountsData> response=data.stream().map(account->mapper.toResponseAccount(account)).collect(Collectors.toList());
+        List<AccountResponse> response=data.stream().map(account->mapper.todto(account)).collect(Collectors.toList());
         return response;
 
     }

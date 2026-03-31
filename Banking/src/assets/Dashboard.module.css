@@ -128,6 +128,10 @@
 
 .accountCard:hover {
   transform: translateY(-2px);
+  cursor:grab;
+}
+.accountCard:active{
+  transform:scale(0.8);
 }
 
 .accountCard::after {
@@ -162,7 +166,14 @@
   font-size: 1.75rem;
   font-weight: 700;
 }
-
+.bankName{
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  opacity: 0.8;
+  color:goldenrod;
+  font-style: oblique;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 .accountName {
   font-size: 0.875rem;
   margin-top: 0.75rem;

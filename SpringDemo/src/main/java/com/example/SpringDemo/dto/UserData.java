@@ -14,5 +14,5 @@ public class UserData{
     @NotNull(message="Mobile Number cannot be empty")
     @Min(value=1000000000,message="Mobile Number must be 10 digits")
     public Long number;
-    private List<AccountsData> accounts=new ArrayList<>();
+    private List<AccountResponse> accounts=new ArrayList<>();
 }

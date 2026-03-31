@@ -90,8 +90,9 @@ function Dashboard(){
           <h2 className={styles.sectionTitle}>Your Accounts</h2>
           <div className={styles.accountsScroll}>
             {data.accounts.map((acc) => (
-              <div key={acc.id} className={styles.accountCard}>
+              <div key={acc.id} className={styles.accountCard} onClick={()=>navigate("/settings",{state:{data:data,account:acc}})}>
                 <div className={styles.accountNumber}>XXXXXXXX {String(acc.id).substring(8)}</div>
+                <div className={styles.bankName}>{acc.bankName}</div>
                 <div className={styles.accountName}>{data.name}</div>
               </div>
             ))}

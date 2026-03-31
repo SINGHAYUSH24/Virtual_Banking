@@ -1,6 +1,8 @@
 package com.example.SpringDemo.controllers;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,13 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.SpringDemo.Service.AccountService;
 import com.example.SpringDemo.dto.AccountBalanceRequest;
 import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
 import com.example.SpringDemo.dto.AccountResponse;
-import com.example.SpringDemo.dto.AccountsData;
 import com.example.SpringDemo.dto.MerchantRequest;
+import com.example.SpringDemo.enums.MerchantEnum;
 
 @RestController
 @RequestMapping("/account")
@@ -25,10 +28,14 @@ public class AccountControllers {
     public AccountControllers(AccountService service){
         this.service=service;   
     }
-    @PostMapping("/merchant")
-    public ResponseEntity<String> convert(@RequestBody MerchantRequest request){
-        String res=service.toMerchant(request);
-        return ResponseEntity.status(200).body(res);
+    @GetMapping("/merchants/categories")
+    public ResponseEntity<List<String>> getCategories(){
+        List<String> categories=Arrays.stream(MerchantEnum.values()).map(category->category.toString().replace("_"," ")).collect(Collectors.toList());
+        return ResponseEntity.ok(categories);
+    }
+    @PostMapping("/request")
+    public ResponseEntity<String> merchantRequest(@RequestBody MerchantRequest request){
+        return ResponseEntity.ok(service.merchantRequest(request));
     }
     @PostMapping("/new")
     public ResponseEntity<String> createAccount(@RequestBody AccountRequest request){
@@ -41,8 +48,8 @@ public class AccountControllers {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/all")
-    public ResponseEntity<List<AccountsData>> getAllAccounts(){
-        List<AccountsData> data=service.getAllAccounts();
+    public ResponseEntity<List<AccountResponse>> getAllAccounts(){
+        List<AccountResponse> data=service.getAllAccounts();
         return ResponseEntity.ok(data);
 
     }@GetMapping("/{id}")
