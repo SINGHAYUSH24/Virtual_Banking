@@ -33,7 +33,7 @@ pipeline {
                         java -version
                         javac -version
                         mvn -version
-                        
+
                         mvn clean package -DskipTests
                         docker build -t ${DOCKER_USERNAME}/resource:latest .
 
@@ -49,11 +49,11 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'kubeconfig']) {
                     sh '''
-                        kubectl set image deployment/react-app -n myapp react=${DOCKER_USERNAME}/reactapp:latest
-                        kubectl set image deployment/springboot-app -n myapp springboot=${DOCKER_USERNAME}/resource:latest
+                        /usr/local/bin/kubectl set image deployment/react-app -n myapp react=${DOCKER_USERNAME}/reactapp:latest
+                        /usr/local/bin/kubectl set image deployment/springboot-app -n myapp springboot=${DOCKER_USERNAME}/resource:latest
 
-                        kubectl rollout status deployment/react-app -n myapp
-                        kubectl rollout status deployment/springboot-app -n myapp
+                        /usr/local/bin/kubectl rollout status deployment/react-app -n myapp
+                        /usr/local/bin/kubectl rollout status deployment/springboot-app -n myapp
                     '''
                 }
             }
