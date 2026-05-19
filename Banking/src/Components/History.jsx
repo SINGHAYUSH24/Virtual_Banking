@@ -20,8 +20,9 @@ function History() {
         const token = localStorage.getItem("token");
         if (!token) navigate("/");
         if (!selectedAccount) return;
+        const API_URL = import.meta.env.VITE_APP_API_URL;;
         const res = await axios.get(
-          `http://localhost:9090/payments/history/${selectedAccount}`,
+          `${API_URL}/payments/history/${selectedAccount}`,
           {
             params: { page: page, size: 10 },
             headers: { Authorization: `Bearer ${token}` },

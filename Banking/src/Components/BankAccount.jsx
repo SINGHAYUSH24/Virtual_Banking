@@ -33,7 +33,8 @@ function BankAccount() {
     e.preventDefault();
     try{
       const token = localStorage.getItem("token");
-      const res=await axios.post(`http://localhost:9090/payments/new`,formData,{headers:{'Authorization':`Bearer ${token}`}});
+      const API_URL = import.meta.env.VITE_APP_API_URL;;
+      const res=await axios.post(`${API_URL}/payments/new`,formData,{headers:{'Authorization':`Bearer ${token}`}});
       toast.success("Payment Successful",{autoClose:2000,});
       setTimeout(()=>{
         navigate("/bill",{state:res.data});

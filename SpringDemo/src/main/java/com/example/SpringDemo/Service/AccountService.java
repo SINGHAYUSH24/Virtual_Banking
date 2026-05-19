@@ -64,6 +64,7 @@ public class AccountService {
         AccountEntity account=new AccountEntity();
         account.setBalance(request.getBalance());
         account.setPin(passwordEncoder.encode(request.getPin()));
+        System.out.println(request.getBankcode());
         String bankName=bankMap.getBank(request.getBankcode());
         account.setBankname(bankName);
         account.setUser(user);
@@ -138,6 +139,15 @@ public class AccountService {
         Pageable pageable=PageRequest.of(page,size,Sort.by("createdAt").descending());
         Page<TransactionEntity> transactions=tRepo.findBySenderidOrReceiverid(id,id,pageable);
         Page<Transaction> data=transactions.map(item->mapper.toTransaction(item));
+        return data;
+    }
+    public List<Transaction> getAllTransactions(Long id){
+        Optional<AccountEntity> response=accountRepo.findById(id);
+        if(response.isEmpty()){
+            throw new InvalidCredentialException("Bank Account Not Found");
+        }
+        List<TransactionEntity> transactions=tRepo.findBySenderidOrReceiverid(id,id);
+        List<Transaction> data=transactions.stream().map(item->mapper.toTransaction(item)).collect(Collectors.toList());
         return data;
     }
     public AccountResponse getAccount(Long id){

@@ -3,7 +3,7 @@ import {useNavigate,useLocation} from 'react-router';
 import axios from "axios";
 import styles from "../assets/Merchant.module.css";
 
-const BASE_URL = "http://localhost:9090";
+const BASE_URL = import.meta.env.VITE_APP_API_URL;
 export default function Merchant() {
   const [merchantName, setMerchantName] = useState("");
   const [category, setCategory] = useState("");

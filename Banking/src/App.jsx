@@ -14,6 +14,8 @@ import History from './Components/History'
 import QRGenerator from './Components/QRGenerator'
 import AccountSettings from "./Components/AccountSettings"
 import Merchant from './Components/Merchant'
+import AddAccount from './Components/AddAccount'
+import Statistics from './Components/Statistics'
 function App() {
   return (
     <BrowserRouter>
@@ -29,6 +31,8 @@ function App() {
       <Route path="/qr" element={<QRGenerator/>}></Route>
       <Route path="/settings" element={<AccountSettings/>}></Route>
       <Route path="/merchant" element={<Merchant/>}></Route>
+      <Route path="/add/:number" element={<AddAccount/>}></Route>
+      <Route path="/statistics" element={<Statistics/>}></Route>
     </Routes>
     </BrowserRouter>
   )

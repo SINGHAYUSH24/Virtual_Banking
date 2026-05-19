@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.SpringDemo.Security.Jwt;
 import com.example.SpringDemo.Service.UserService;
 import com.example.SpringDemo.dto.CreateUserRequest;
+import com.example.SpringDemo.dto.DashboardResponse;
 import com.example.SpringDemo.dto.Login;
+import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.UserData;
 
 import jakarta.validation.Valid;
@@ -58,5 +61,14 @@ public ResponseEntity<?> update(@Valid @RequestBody UserData data){
 @DeleteMapping("/delete/{id}")
 public ResponseEntity<String> delete(@PathVariable int id){
     return ResponseEntity.status(200).body(service.deleteUser(id));
+}
+@GetMapping("/transactions")
+public ResponseEntity<List<Transaction>> getTransactions(){
+    List<Transaction> transactions=service.getTransactions();
+    return ResponseEntity.ok(transactions);
+}
+@GetMapping("/dashboard")
+public ResponseEntity<DashboardResponse> getDashboard(){
+    return ResponseEntity.ok(service.getDashboard());
 }
 }

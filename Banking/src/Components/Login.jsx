@@ -19,7 +19,8 @@ function Login(){
     }
     const handleSubmit=async(e)=>{
         try{
-            const res=await axios.post(`http://localhost:9090/user/login`,data);
+            const API_URL = import.meta.env.VITE_APP_API_URL;
+            const res=await axios.post(`${API_URL}/user/login`,data);
             localStorage.setItem("token",res.data);
             toast.success("Login Successful");
             setTimeout(()=>{

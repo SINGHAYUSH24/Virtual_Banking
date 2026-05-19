@@ -1,5 +1,9 @@
 package com.example.SpringDemo.Service;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -7,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.SpringDemo.Entity.AccountEntity;
 import com.example.SpringDemo.Entity.UserEntity;
 import com.example.SpringDemo.Exception.InvalidCredentialException;
 import com.example.SpringDemo.Exception.NoDataException;
@@ -15,6 +20,8 @@ import com.example.SpringDemo.Mapper.UserMapper;
 import com.example.SpringDemo.Repository.UserRepository;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.CreateUserRequest;
+import com.example.SpringDemo.dto.DashboardResponse;
+import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.UserData;
 
 import jakarta.transaction.Transactional;
@@ -24,11 +31,13 @@ public class UserService {
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper acc;
-    public UserService(UserMapper mapper,UserRepository repo,PasswordEncoder passwordEncoder,AccountMapper acc){
+    private final AccountService service;
+    public UserService(UserMapper mapper,UserRepository repo,PasswordEncoder passwordEncoder,AccountMapper acc,AccountService service){
         this.mapper=mapper;
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
         this.acc=acc;
+        this.service=service;
     }
     public UserData createUser(CreateUserRequest request){
         if(repo.existsByNumber(request.getNumber())){
@@ -75,4 +84,68 @@ public class UserService {
         repo.delete(user);
         return "User Deleted";
     }
+    public List<Transaction> getTransactions(){
+        UserEntity user=getUser();
+        List<AccountEntity> accounts=user.getAccounts();
+        List<Transaction> transactions=new ArrayList<>();
+        for(int i=0;i<accounts.size();i++){
+            AccountEntity account=accounts.get(i);
+            List<Transaction> transaction=service.getAllTransactions(account.getId());
+            transactions.addAll(transaction);
+        }
+        return transactions;
+    }
+    public DashboardResponse getDashboard() {
+    UserEntity user=getUser();
+    List<AccountEntity> accounts=user.getAccounts();
+    List<Long> userIds=accounts.stream().map(account->account.getId()).collect(Collectors.toList());
+    List<Transaction> transactions = getTransactions();
+    LocalDateTime last30Days = LocalDateTime.now().minusDays(30);
+    List<Transaction> recent = transactions.stream().filter(t -> t.getCreatedAt().isAfter(last30Days)).toList();
+    double totalExpense = recent.stream().filter(t -> userIds.contains(t.getSenderid())).mapToDouble(Transaction::getAmount).sum();
+    double totalIncome = recent.stream().filter(t->userIds.contains(t.getReceiverid())).mapToDouble(Transaction::getAmount).sum();
+    double netIncome = totalIncome - totalExpense;
+    Map<String, Double> categoryMap = recent.stream()
+            .filter(t -> userIds.contains(t.getSenderid()))
+            .collect(Collectors.groupingBy(
+                    Transaction::getCategory,
+                    Collectors.summingDouble(Transaction::getAmount)
+            ));
+
+    // Sort + Top 5
+    Map<String, Double> topCategories = categoryMap.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .limit(5)
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
+    Map<String, Double> merchantMap = recent.stream()
+            .filter(t -> userIds.contains(t.getReceiverid()))
+            .collect(Collectors.groupingBy(
+                    Transaction::getMerchantName,
+                    Collectors.summingDouble(Transaction::getAmount)
+            ));
+
+    Map<String, Double> topMerchants = merchantMap.entrySet().stream()
+            .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
+            .limit(5)
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (a, b) -> a,
+                    LinkedHashMap::new
+            ));
+
+    DashboardResponse response = new DashboardResponse();
+    response.setTotalExpense(totalExpense);
+    response.setTotalIncome(totalIncome);
+    response.setNetIncome(netIncome);
+    response.setTopCategories(topCategories);
+    response.setTopMerchants(topMerchants);
+
+    return response;
+}
 }

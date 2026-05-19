@@ -59,7 +59,8 @@ function Signup (){
         return;
     }
     try{
-        const res=await axios.post(`http://localhost:9090/user/signup`,formData);
+        const API_URL = import.meta.env.VITE_APP_API_URL;
+        const res=await axios.post(`${API_URL}/user/signup`,formData);
         const data=res.data;
         toast.success(`User ${data.name} created`);
         setFormData({name:'',number:'',password:''});

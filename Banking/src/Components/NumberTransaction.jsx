@@ -33,7 +33,8 @@ function NumberTransaction(){
         e.preventDefault();
         try{
             const token=localStorage.getItem("token");
-            const res=await axios.get(`http://localhost:9090/account/all/${receiverNumber}`,{
+            const API_URL = import.meta.env.VITE_APP_API_URL;
+            const res=await axios.get(`${API_URL}/account/all/${receiverNumber}`,{
                 headers:{
                     'Authorization':`Bearer ${token}`
                 }
@@ -41,7 +42,7 @@ function NumberTransaction(){
             const receiver_account=res.data[0].id;
             console.log(receiver_account);
             setForm(prev=>({...prev,receiver_id:receiver_account}));
-            const response=await axios.post(`http://localhost:9090/payments/new`,formData,{headers:{'Authorization':`Bearer ${token}`}});
+            const response=await axios.post(`${API_URL}/payments/new`,formData,{headers:{'Authorization':`Bearer ${token}`}});
             toast.success("Payment Successful",{autoClose:2000,});
             setTimeout(()=>{
                 navigate("/bill",{state:response.data});

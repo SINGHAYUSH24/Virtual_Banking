@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringDemoApplication {
 		public static void main(String[] args) {
 		SpringApplication.run(SpringDemoApplication.class, args);
-		System.out.println("Server Started at Port 9090");
+		System.out.println("Server Started at Port 8080");
 	}
 
 }

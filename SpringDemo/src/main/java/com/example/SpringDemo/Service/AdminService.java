@@ -16,22 +16,9 @@ public class AdminService {
     public AdminService(MerchantApprovalRepository merchantApprovalRepository) {
         this.merchantApprovalRepository = merchantApprovalRepository;
     }
-
-    /**
-     * Returns all pending merchant requests.
-     * Used by GET /admin/requests
-     */
     public List<MerchantApproval> getAllPendingRequests() {
         return merchantApprovalRepository.findAll();
     }
-
-    /**
-     * Approves a merchant request by deleting it from the pending table.
-     * Used by DELETE /admin/approve/{id}
-     *
-     * @param requestId  the id of the MerchantRequest to approve
-     * @throws IllegalArgumentException if no request with that id exists
-     */
     @Transactional
     public void approveRequest(int requestId) {
         MerchantApproval request = merchantApprovalRepository.findById(requestId)

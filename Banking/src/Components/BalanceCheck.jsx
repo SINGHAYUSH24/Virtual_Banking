@@ -46,7 +46,8 @@ const BalanceCheck = () => {
                 navigate("/");
             },3500);
         }
-        const res=await axios.post(`http://localhost:9090/account/balance`,data,{headers:
+        const API_URL = import.meta.env.VITE_APP_API_URL;
+        const res=await axios.post(`${API_URL}/account/balance`,data,{headers:
             {
                 'Authorization':`Bearer ${token}`
             }

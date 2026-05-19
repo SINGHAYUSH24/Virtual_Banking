@@ -19,7 +19,8 @@ function Dashboard(){
             navigate("/");
         }
         try{
-            const res=await axios.get('http://localhost:9090/user/profile',
+           const API_URL = import.meta.env.VITE_APP_API_URL;;
+            const res=await axios.get(`${API_URL}/user/profile`,
                 {
                     headers:{
                         'Authorization':`Bearer ${token}`
@@ -31,7 +32,7 @@ function Dashboard(){
             const accountIds = data.accounts.map(acc => acc.id);
             setAccounts(accountIds);       
             setGlobalAccounts(accountIds);
-            const response=await axios.get(`http://localhost:9090/account/all/${data.number}`,
+            const response=await axios.get(`${API_URL}/account/all/${data.number}`,
                 {
                     headers:{
                         'Authorization':`Bearer ${token}`
@@ -96,6 +97,7 @@ function Dashboard(){
                 <div className={styles.accountName}>{data.name}</div>
               </div>
             ))}
+            <button style={{color:"white",borderRadius:"10px",backgroundColor:"hsl(220, 37%, 40%)",padding:"10px"}} onClick={()=>navigate(`/add/${data.number}`)}>+<div>New Account</div></button>
           </div>
         </section>
         <section className={styles.actionsSection}>
@@ -124,6 +126,9 @@ function Dashboard(){
             <button className={styles.actionCard} onClick={()=>{navigate("/history")}}>
               <svg fill="#000000" width="64px" height="64px" viewBox="0 0 512 512" id="_x30_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M256,0C114.615,0,0,114.615,0,256s114.615,256,256,256s256-114.615,256-256S397.385,0,256,0z M366.364,366.309 c-60.922,60.921-159.695,60.921-220.617,0c-30.342-30.342-45.572-70.073-45.691-109.841c-0.04-13.453,10.696-24.72,24.149-24.841 c13.565-0.123,24.601,10.837,24.601,24.374h0.05c0,27.464,10.454,54.929,31.363,75.837c41.817,41.817,109.857,41.817,151.674,0 c41.986-41.985,41.986-109.69,0-151.675c-41.817-41.817-109.857-41.816-151.674,0l0,0c7.367,7.367,3.551,19.973-6.666,22.016 l-43.089,8.618c-9.128,1.826-17.176-6.222-15.35-15.35l8.618-43.089c2.043-10.217,14.649-14.033,22.016-6.666v0 c60.922-60.922,159.695-60.922,220.617,0C427.137,206.463,427.137,305.537,366.364,366.309z M305.26,263.299 c8.744,5.048,11.74,16.229,6.691,24.973v0c-5.048,8.744-16.229,11.74-24.973,6.691l-40.064-23.131l0.001-0.002 c-5.463-3.161-9.142-9.064-9.142-15.83v-64.543c0-10.096,8.185-18.281,18.281-18.281h0c10.096,0,18.281,8.185,18.281,18.281v53.989 L305.26,263.299z"></path></g></svg>
               Transaction History</button>
+            <button className={styles.actionCard} onClick={()=>{navigate("/statistics")}}>
+            <svg width="64px" height="64px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs></defs><path class="cls-1" d="M12,12H22.5a10.45,10.45,0,0,1-3.07,7.42L12,12V1.48A10.5,10.5,0,1,0,19.43,19.4"></path><path class="cls-1" d="M15.82,8.16h3.34a1.43,1.43,0,0,0,1.43-1.43h0A1.43,1.43,0,0,0,19.16,5.3h-1a1.44,1.44,0,0,1-1.43-1.44h0A1.43,1.43,0,0,1,18.2,2.43h3.35"></path><line class="cls-1" x1="18.68" y1="0.52" x2="18.68" y2="2.43"></line><line class="cls-1" x1="18.68" y1="8.16" x2="18.68" y2="10.07"></line></g></svg>  
+            Expense Tracker</button>
           </div>
         </section>
         <section className={styles.transactionsSection}>
