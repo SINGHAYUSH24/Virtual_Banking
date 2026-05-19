@@ -27,6 +27,13 @@ pipeline {
             steps {
                 dir('SpringDemo') {
                     sh '''
+                        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+                        export PATH=$JAVA_HOME/bin:$PATH
+
+                        java -version
+                        javac -version
+                        mvn -version
+                        
                         mvn clean package -DskipTests
                         docker build -t ${DOCKER_USERNAME}/resource:latest .
 
