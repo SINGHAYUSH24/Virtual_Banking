@@ -43,7 +43,7 @@ function Login(){
                 <h1 className={styles.login}>Login</h1>
                 <div style={{padding:"20px"}}>
                 <div className={styles.label}>
-                    <label htmlFor="email">Enter Your Mobile Number</label>
+                    <label htmlFor="email">Enter Your Email Address</label>
                 </div>
                 <input className={styles.input} type="text" name="number" id="number" value={data.number} onChange={handleChange}/>
                 </div>

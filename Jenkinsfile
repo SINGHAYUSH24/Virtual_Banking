@@ -4,8 +4,6 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_USERNAME = 'singhayush24'
-
-        // versioned tagging (VERY IMPORTANT)
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
 
