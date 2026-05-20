@@ -40,7 +40,7 @@ function Login(){
                 <h2>We Offer various financial solutions</h2>
             </div>
             <div className={styles.form}>
-                <h1>Login</h1>
+                <h1 className={styles.login}>Login</h1>
                 <div style={{padding:"20px"}}>
                 <div className={styles.label}>
                     <label htmlFor="email">Enter Your Mobile Number</label>
