@@ -42,6 +42,8 @@ public class AccountMapper {
         response.setId(entity.getId());
         response.setBalance(entity.getBalance());
         response.setBankName(entity.getBankname());
+        response.setType(entity.getType() != null ? entity.getType().toString() : "NONE");
+        response.setMerchantName(entity.getMerchant_name());
         List<Transaction> list=repo.findBySenderidOrReceiverid(entity.getId(), entity.getId()).stream().map(item->toTransaction(item)).collect(Collectors.toList());
         response.setTransactions(list);
         return response;
@@ -51,6 +53,8 @@ public class AccountMapper {
         account.setId(entity.getId());
         account.setBalance(entity.getBalance());
         account.setBankName(entity.getBankname());
+        account.setType(entity.getType() != null ? entity.getType().toString() : "NONE");
+        account.setMerchantName(entity.getMerchant_name());
         return account;
     }
 }

@@ -157,6 +157,9 @@ public class AccountService {
     }
     public AccountBalanceResponse getBalance(AccountBalanceRequest request){
         AccountEntity account=accountRepo.findById(request.getId()).orElseThrow(()->new InvalidCredentialException("Bank Account Not Found"));
+        if (!passwordEncoder.matches(request.getPin().trim(), account.getPin())) {
+            throw new InvalidCredentialException("UPI Pin is Incorrect");
+        }
         AccountBalanceResponse response=new AccountBalanceResponse();
         response.setId(account.getId());
         response.setBalance(account.getBalance());

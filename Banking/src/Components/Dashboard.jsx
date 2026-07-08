@@ -76,6 +76,9 @@ function Dashboard(){
       <nav className={styles.navbar}>
         <span className={styles.navBrand}>Net Pay</span>
         <div className={styles.navActions}>
+          <button className={styles.navBtn} onClick={() => navigate("/admin-portal")}>
+            Admin Panel
+          </button>
           <button className={styles.navBtn}>
             {//<User size={16} />
             }
@@ -91,10 +94,22 @@ function Dashboard(){
           <h2 className={styles.sectionTitle}>Your Accounts</h2>
           <div className={styles.accountsScroll}>
             {data.accounts.map((acc) => (
-              <div key={acc.id} className={styles.accountCard} onClick={()=>navigate("/settings",{state:{data:data,account:acc}})}>
+              <div key={acc.id} className={styles.accountCard}>
                 <div className={styles.accountNumber}>XXXXXXXX {String(acc.id).substring(8)}</div>
                 <div className={styles.bankName}>{acc.bankName}</div>
                 <div className={styles.accountName}>{data.name}</div>
+                {acc.type && acc.type !== "NONE" ? (
+                  <div className={styles.merchantBadge}>
+                    Merchant: {acc.merchantName || acc.type.replace(/_/g, " ")}
+                  </div>
+                ) : (
+                  <button
+                    className={styles.merchantRegBtn}
+                    onClick={() => navigate("/merchant", { state: { id: acc.id } })}
+                  >
+                    Register Merchant
+                  </button>
+                )}
               </div>
             ))}
             <button style={{color:"white",borderRadius:"10px",backgroundColor:"hsl(220, 37%, 40%)",padding:"10px"}} onClick={()=>navigate(`/add/${data.number}`)}>+<div>New Account</div></button>

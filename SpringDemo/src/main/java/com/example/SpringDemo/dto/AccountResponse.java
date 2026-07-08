@@ -8,4 +8,6 @@ public class AccountResponse {
     private double balance;
     private String bankName;
     private List<Transaction> transactions;
+    private String type;
+    private String merchantName;
 }

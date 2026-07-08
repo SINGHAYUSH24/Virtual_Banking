@@ -55,4 +55,20 @@ public class AdminController {
             return ResponseEntity.status(404).body(Map.of("error", ex.getMessage()));
         }
     }
+
+    /**
+     * DELETE /admin/reject/{id}
+     * Rejects a merchant request and removes it from the pending table without updating the account.
+     */
+    @DeleteMapping("/reject/{id}")
+    public ResponseEntity<Map<String, String>> rejectRequest(@PathVariable int id) {
+        try {
+            adminService.rejectRequest(id);
+            return ResponseEntity.ok(
+                    Map.of("message", "Merchant request " + id + " Rejected.")
+            );
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(404).body(Map.of("error", ex.getMessage()));
+        }
+    }
 }

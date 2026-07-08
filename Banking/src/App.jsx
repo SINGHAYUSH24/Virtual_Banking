@@ -12,7 +12,7 @@ import NumberTransaction from './Components/NumberTransaction'
 import BalanceCheck from './Components/BalanceCheck'
 import History from './Components/History'
 import QRGenerator from './Components/QRGenerator'
-import AccountSettings from "./Components/AccountSettings"
+import AdminPanel from "./Components/AdminPanel"
 import Merchant from './Components/Merchant'
 import AddAccount from './Components/AddAccount'
 import Statistics from './Components/Statistics'
@@ -29,7 +29,7 @@ function App() {
       <Route path="/balance" element={<BalanceCheck/>}></Route>
       <Route path="/history" element={<History/>}></Route>
       <Route path="/qr" element={<QRGenerator/>}></Route>
-      <Route path="/settings" element={<AccountSettings/>}></Route>
+      <Route path="/admin-portal" element={<AdminPanel/>}></Route>
       <Route path="/merchant" element={<Merchant/>}></Route>
       <Route path="/add/:number" element={<AddAccount/>}></Route>
       <Route path="/statistics" element={<Statistics/>}></Route>

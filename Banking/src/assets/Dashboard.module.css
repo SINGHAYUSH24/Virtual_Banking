@@ -346,3 +346,34 @@
     min-width: 240px;
   }
 }
+
+.merchantBadge {
+  font-size: 0.75rem;
+  background: hsla(170, 60%, 45%, 0.2);
+  color: hsl(170, 60%, 45%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+  display: inline-block;
+  font-weight: 600;
+  border: 1px solid hsla(170, 60%, 45%, 0.4);
+}
+
+.merchantRegBtn {
+  margin-top: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: hsl(170, 60%, 45%);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  z-index: 10;
+  position: relative;
+}
+
+.merchantRegBtn:hover {
+  background: hsl(170, 60%, 35%);
+}
