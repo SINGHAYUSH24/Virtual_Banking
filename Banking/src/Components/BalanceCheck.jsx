@@ -56,9 +56,13 @@ const BalanceCheck = () => {
         setData({id:"",pin:""});
         setBalance({id:response.id,amount:response.balance});
     }catch(err){
+      if (err.response?.data && Array.isArray(err.response.data)) {
         err.response.data.forEach((error)=>{
-        toast.error(error);
-      });
+          toast.error(error);
+        });
+      } else {
+        toast.error(err.response?.data?.message || err.response?.data || err.message || "Failed to retrieve balance.");
+      }
       const token = localStorage.getItem("token");
       if(token) return;
       setTimeout(()=>{

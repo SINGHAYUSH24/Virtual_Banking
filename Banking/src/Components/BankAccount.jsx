@@ -40,9 +40,13 @@ function BankAccount() {
         navigate("/bill",{state:res.data});
       },2000);
     }catch(err){
-      err.response.data.forEach((error)=>{
-        toast.error(error);
-      });
+      if (err.response?.data && Array.isArray(err.response.data)) {
+        err.response.data.forEach((error)=>{
+          toast.error(error);
+        });
+      } else {
+        toast.error(err.response?.data?.message || err.response?.data || err.message || "An error occurred during payment.");
+      }
       const token = localStorage.getItem("token");
       if(token) return;
       setTimeout(()=>{

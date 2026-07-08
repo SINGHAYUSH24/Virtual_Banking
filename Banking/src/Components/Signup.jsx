@@ -65,7 +65,7 @@ function Signup (){
         toast.success(`User ${data.name} created`);
         setFormData({name:'',number:'',password:''});
     }catch(err){
-        toast.error(err.response.data);
+        toast.error(err.response?.data?.message || err.response?.data || err.message || "Signup failed. Is the server running?");
     }
   };
   return (

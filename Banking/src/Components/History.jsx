@@ -31,10 +31,14 @@ function History() {
         setTransactions(res.data.content);
         setLast(res.data.last);
       } catch (err) {
-        err.response.data.forEach((error) => toast.error(error));
-        setInterval(()=>{
+        if (err.response?.data && Array.isArray(err.response.data)) {
+          err.response.data.forEach((error) => toast.error(error));
+        } else {
+          toast.error(err.response?.data?.message || err.response?.data || err.message || "Failed to fetch transactions");
+        }
+        setTimeout(() => {
           navigate("/");
-        },3500);
+        }, 3500);
       }
     }
     fetchData();

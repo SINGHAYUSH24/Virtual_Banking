@@ -27,7 +27,7 @@ function Login(){
                 navigate("/dashboard");
             },3500);
         }catch(err){
-            toast.error(err.response.data);
+            toast.error(err.response?.data?.message || err.response?.data || err.message || "Connection failed. Is the server running?");
         }
     }
     return(

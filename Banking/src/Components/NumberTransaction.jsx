@@ -41,16 +41,21 @@ function NumberTransaction(){
             });
             const receiver_account=res.data[0].id;
             console.log(receiver_account);
-            setForm(prev=>({...prev,receiver_id:receiver_account}));
-            const response=await axios.post(`${API_URL}/payments/new`,formData,{headers:{'Authorization':`Bearer ${token}`}});
+            const payload = { ...formData, receiver_id: receiver_account };
+            setForm(prev => ({ ...prev, receiver_id: receiver_account }));
+            const response=await axios.post(`${API_URL}/payments/new`,payload,{headers:{'Authorization':`Bearer ${token}`}});
             toast.success("Payment Successful",{autoClose:2000,});
             setTimeout(()=>{
                 navigate("/bill",{state:response.data});
             },2000);
         }catch(err){
-          err.response.data.forEach((error)=>{
-                  toast.error(error);
-          });
+          if (err.response?.data && Array.isArray(err.response.data)) {
+            err.response.data.forEach((error)=>{
+                    toast.error(error);
+            });
+          } else {
+            toast.error(err.response?.data?.message || err.response?.data || err.message || "An error occurred during payment.");
+          }
           const token = localStorage.getItem("token");
           if(token) return;
           setTimeout(()=>{
