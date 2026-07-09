@@ -36,7 +36,7 @@ function Login(){
         <div className={styles.main}>
             <div className={styles.icon}>
                 <img src={Bank_icon} style={{height:"300px"}}></img>
-                <h1>Welcome to NetPay</h1>
+                <h1><b>Welcome to NetPay</b></h1>
                 <h2>We Offer various financial solutions</h2>
             </div>
             <div className={styles.form}>
