@@ -157,8 +157,37 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   opacity: 0.6;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   letter-spacing: 0.15em;
+}
+
+.accountNumberRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.visibilityBtn {
+  background: none;
+  border: none;
+  color: hsla(210, 40%, 98%, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  z-index: 10;
+  position: relative;
+}
+
+.visibilityBtn:hover {
+  color: hsl(210, 40%, 98%);
+}
+
+.eyeIcon {
+  display: block;
 }
 
 .accountBalance {
