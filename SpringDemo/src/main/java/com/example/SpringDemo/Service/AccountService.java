@@ -22,6 +22,8 @@ import com.example.SpringDemo.Repository.AccountRepository;
 import com.example.SpringDemo.Repository.MerchantApprovalRepository;
 import com.example.SpringDemo.Repository.TransactionRepository;
 import com.example.SpringDemo.Repository.UserRepository;
+import com.example.SpringDemo.Repository.PayeeRepository;
+import com.example.SpringDemo.Entity.PayeeEntity;
 import com.example.SpringDemo.dto.AccountBalanceRequest;
 import com.example.SpringDemo.dto.AccountBalanceResponse;
 import com.example.SpringDemo.dto.AccountRequest;
@@ -41,7 +43,8 @@ public class AccountService {
     private final TransactionRepository tRepo;
     private final BankMap bankMap;
     private final MerchantApprovalRepository merchantRepo;
-    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo,BankMap bankMap,MerchantApprovalRepository merchantApprovalRepository){
+    private final PayeeRepository payeeRepo;
+    public AccountService(UserRepository repo ,AccountRepository repoAccount,PasswordEncoder passwordEncoder,AccountMapper mapper,TransactionRepository tRepo,BankMap bankMap,MerchantApprovalRepository merchantApprovalRepository,PayeeRepository payeeRepo){
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
         this.mapper=mapper;
@@ -49,6 +52,7 @@ public class AccountService {
         this.tRepo=tRepo;
         this.bankMap=bankMap;
         this.merchantRepo=merchantApprovalRepository;
+        this.payeeRepo=payeeRepo;
     }
     public String merchantRequest(MerchantRequest request){
         MerchantApproval entity=new MerchantApproval();
@@ -120,6 +124,40 @@ public class AccountService {
         if(!passwordEncoder.matches(transaction.getPin().trim(),sender.getPin())){
             throw new InvalidCredentialException("UPI Pin is Incorrect");
         }
+        
+        // Transaction limit enforcement
+        double maxSingleLimit = 25000.0;
+        if (transaction.getAmount() > maxSingleLimit) {
+            throw new InvalidCredentialException("Transaction amount exceeds the maximum single transaction limit of ₹25,000.");
+        }
+
+        double maxDailyLimit = 50000.0;
+        java.time.LocalDateTime startOfDay = java.time.LocalDate.now().atStartOfDay();
+        double dailySpent = tRepo.getDailySpent(transaction.getAccount_id(), startOfDay);
+        if (dailySpent + transaction.getAmount() > maxDailyLimit) {
+            throw new InvalidCredentialException("Transaction would exceed the daily cumulative limit of ₹50,000. Remaining limit today: ₹" + String.format("%.2f", Math.max(0.0, maxDailyLimit - dailySpent)));
+        }
+
+        // Payee verification and 10-minute cooling period limit
+        boolean isSelfTransfer = receiver.getUser().getId() == sender.getUser().getId();
+        boolean isMerchantTransfer = receiver.getType() != com.example.SpringDemo.enums.MerchantEnum.NONE;
+
+        if (!isSelfTransfer && !isMerchantTransfer) {
+            Optional<PayeeEntity> payeeOpt = payeeRepo.findByUserIdAndPayeeAccountId(sender.getUser().getId(), transaction.getReceiver_id());
+            if (payeeOpt.isEmpty()) {
+                throw new InvalidCredentialException("Recipient must be registered as a payee before transferring funds.");
+            }
+            
+            PayeeEntity payee = payeeOpt.get();
+            java.time.LocalDateTime cooldownThreshold = payee.getCreatedAt().plusMinutes(10);
+            if (java.time.LocalDateTime.now().isBefore(cooldownThreshold)) {
+                double maxCooldownLimit = 5000.0;
+                if (transaction.getAmount() > maxCooldownLimit) {
+                    throw new InvalidCredentialException("Recipient is in a 10-minute cooling period. Maximum transfer limit is ₹5,000 during this time.");
+                }
+            }
+        }
+
         sender.setBalance(sender.getBalance()-transaction.getAmount());
         receiver.setBalance(receiver.getBalance()+transaction.getAmount());
         TransactionEntity entity=new TransactionEntity();
@@ -164,5 +202,22 @@ public class AccountService {
         response.setId(account.getId());
         response.setBalance(account.getBalance());
         return response;
+    }
+    public byte[] generateCsvStatement(Long id) {
+        List<Transaction> transactions = getAllTransactions(id);
+        StringBuilder sb = new StringBuilder();
+        sb.append("Transaction ID,Date,Sender ID,Sender Name,Receiver ID,Receiver Name,Amount (INR),Type\n");
+        for (Transaction tx : transactions) {
+            String type = tx.getSenderid().equals(id) ? "DEBIT" : "CREDIT";
+            sb.append(tx.getId()).append(",")
+              .append(tx.getCreatedAt() != null ? tx.getCreatedAt().toString() : "").append(",")
+              .append(tx.getSenderid()).append(",")
+              .append(tx.getSenderName() != null ? tx.getSenderName().replace(",", " ") : "").append(",")
+              .append(tx.getReceiverid()).append(",")
+              .append(tx.getReceiverName() != null ? tx.getReceiverName().replace(",", " ") : "").append(",")
+              .append(tx.getAmount()).append(",")
+              .append(type).append("\n");
+        }
+        return sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
 }

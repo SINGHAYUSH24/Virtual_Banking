@@ -20,6 +20,9 @@ function BankAccount() {
       }
       try {
         setData(location.state.data);
+        if (location.state.receiver_id) {
+          setForm(prev => ({ ...prev, receiver_id: location.state.receiver_id }));
+        }
       } catch (err) {
         toast.error("Could Not Fetch Account Details!");
       }

@@ -18,11 +18,16 @@ import com.example.SpringDemo.Exception.NoDataException;
 import com.example.SpringDemo.Mapper.AccountMapper;
 import com.example.SpringDemo.Mapper.UserMapper;
 import com.example.SpringDemo.Repository.UserRepository;
+import com.example.SpringDemo.Repository.PayeeRepository;
+import com.example.SpringDemo.Repository.AccountRepository;
+import com.example.SpringDemo.Entity.PayeeEntity;
+import com.example.SpringDemo.Entity.AccountEntity;
 import com.example.SpringDemo.dto.AccountResponse;
 import com.example.SpringDemo.dto.CreateUserRequest;
 import com.example.SpringDemo.dto.DashboardResponse;
 import com.example.SpringDemo.dto.Transaction;
 import com.example.SpringDemo.dto.UserData;
+import com.example.SpringDemo.dto.PayeeRequest;
 
 import jakarta.transaction.Transactional;
 @Service
@@ -32,12 +37,16 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper acc;
     private final AccountService service;
-    public UserService(UserMapper mapper,UserRepository repo,PasswordEncoder passwordEncoder,AccountMapper acc,AccountService service){
+    private final PayeeRepository payeeRepo;
+    private final AccountRepository accountRepo;
+    public UserService(UserMapper mapper,UserRepository repo,PasswordEncoder passwordEncoder,AccountMapper acc,AccountService service,PayeeRepository payeeRepo,AccountRepository accountRepo){
         this.mapper=mapper;
         this.repo=repo;
         this.passwordEncoder=passwordEncoder;
         this.acc=acc;
         this.service=service;
+        this.payeeRepo=payeeRepo;
+        this.accountRepo=accountRepo;
     }
     public UserData createUser(CreateUserRequest request){
         if(repo.existsByNumber(request.getNumber())){
@@ -148,4 +157,48 @@ public class UserService {
 
     return response;
 }
+    @Transactional
+    public String addPayee(PayeeRequest request) {
+        UserEntity currentUser = getUser();
+        
+        // 1. Fetch destination bank account
+        AccountEntity recipientAccount = accountRepo.findById(request.getPayeeAccountId())
+            .orElseThrow(() -> new InvalidCredentialException("Payee Bank Account not found!"));
+
+        // Check if user is trying to add their own account as a payee
+        List<Long> userAccountIds = currentUser.getAccounts().stream()
+            .map(AccountEntity::getId).collect(Collectors.toList());
+        if (userAccountIds.contains(request.getPayeeAccountId())) {
+            throw new InvalidCredentialException("You cannot register your own account as a payee.");
+        }
+
+        // Check if payee is already registered
+        if (payeeRepo.findByUserIdAndPayeeAccountId(currentUser.getId(), request.getPayeeAccountId()).isPresent()) {
+            throw new InvalidCredentialException("This payee is already registered.");
+        }
+
+        // 2. Name-Matching: Validate if user-entered name matches actual recipient name
+        String actualRecipientName = recipientAccount.getUser().getName();
+        
+        String cleanedInput = request.getPayeeName().trim().replaceAll("\\s+", " ");
+        String cleanedActual = actualRecipientName.trim().replaceAll("\\s+", " ");
+        
+        if (!cleanedInput.equalsIgnoreCase(cleanedActual)) {
+            throw new InvalidCredentialException("Name mismatch! The bank account is registered under a different name. Please verify the name.");
+        }
+
+        // 3. Save the Payee
+        PayeeEntity payee = new PayeeEntity();
+        payee.setUserId(currentUser.getId());
+        payee.setPayeeAccountId(request.getPayeeAccountId());
+        payee.setPayeeName(actualRecipientName);
+        
+        payeeRepo.save(payee);
+        return "Payee registered successfully under verified name: " + actualRecipientName;
+    }
+
+    public List<PayeeEntity> getPayees() {
+        UserEntity currentUser = getUser();
+        return payeeRepo.findByUserId(currentUser.getId());
+    }
 }

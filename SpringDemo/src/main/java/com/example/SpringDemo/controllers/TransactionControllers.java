@@ -32,4 +32,12 @@ public class TransactionControllers {
         Page<Transaction> data=service.getTransactions(id,page,size);
         return ResponseEntity.ok(data);
     }
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> downloadStatement(@PathVariable Long id) {
+        byte[] csvData = service.generateCsvStatement(id);
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.parseMediaType("text/csv"));
+        headers.add("Content-Disposition", "attachment; filename=\"Statement_" + id + ".csv\"");
+        return new ResponseEntity<>(csvData, headers, org.springframework.http.HttpStatus.OK);
+    }
 }

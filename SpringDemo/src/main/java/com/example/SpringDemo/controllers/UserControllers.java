@@ -71,4 +71,12 @@ public ResponseEntity<List<Transaction>> getTransactions(){
 public ResponseEntity<DashboardResponse> getDashboard(){
     return ResponseEntity.ok(service.getDashboard());
 }
+@PostMapping("/payee/add")
+public ResponseEntity<String> addPayee(@Valid @RequestBody com.example.SpringDemo.dto.PayeeRequest request) {
+    return ResponseEntity.ok(service.addPayee(request));
+}
+@GetMapping("/payees")
+public ResponseEntity<List<com.example.SpringDemo.Entity.PayeeEntity>> getPayees() {
+    return ResponseEntity.ok(service.getPayees());
+}
 }

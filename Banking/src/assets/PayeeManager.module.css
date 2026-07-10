@@ -1,0 +1,176 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+  background-color: #F8F9FA;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+.wrapper {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.headerTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1A1D20;
+  margin: 0;
+}
+.backBtn {
+  background: transparent;
+  border: 1px solid #E2E8F0;
+  color: #4A5568;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+.backBtn:hover {
+  background-color: #F7FAFC;
+  border-color: #CBD5E0;
+}
+.formSection {
+  padding: 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2D3748;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4A5568;
+  margin-bottom: 6px;
+}
+.input {
+  padding: 10px 14px;
+  border: 1px solid #CBD5E0;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input:focus {
+  border-color: #3182CE;
+}
+.submitBtn {
+  background-color: #3182CE;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+.submitBtn:hover {
+  background-color: #2B6CB0;
+}
+.listSection {
+  padding: 24px;
+}
+.payeeList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.payeeCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  background-color: #F7FAFC;
+  transition: box-shadow 0.2s;
+}
+.payeeCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.payeeDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.payeeName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2D3748;
+  margin: 0;
+}
+.payeeAcc {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: #718096;
+  margin: 0;
+}
+.badgeGroup {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.badgeActive {
+  background-color: #C6F6D5;
+  color: #22543D;
+}
+.badgeCooling {
+  background-color: #FEEBC8;
+  color: #744210;
+}
+.badgeLimit {
+  background-color: #EDF2F7;
+  color: #4A5568;
+}
+.actionBtn {
+  background-color: #48BB78;
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.actionBtn:hover {
+  background-color: #38A169;
+}
+.emptyState {
+  text-align: center;
+  color: #A0AEC0;
+  font-size: 13px;
+  padding: 16px 0;
+}

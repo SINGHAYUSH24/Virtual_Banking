@@ -11,5 +11,8 @@ import com.example.SpringDemo.Entity.TransactionEntity;
 public interface TransactionRepository extends JpaRepository<TransactionEntity,Integer>{
     Page<TransactionEntity> findBySenderidOrReceiverid(Long senderid,Long Receiverid,Pageable pageable);
     List<TransactionEntity> findBySenderidOrReceiverid(Long senderid,Long receiverid);
+
+    @org.springframework.data.jpa.repository.Query("SELECT COALESCE(SUM(t.amount), 0.0) FROM TransactionEntity t WHERE t.senderid = :senderid AND t.createdAt >= :startOfDay")
+    double getDailySpent(Long senderid, java.time.LocalDateTime startOfDay);
 }
 

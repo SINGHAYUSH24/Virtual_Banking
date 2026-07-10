@@ -16,9 +16,12 @@ import AdminPanel from "./Components/AdminPanel"
 import Merchant from './Components/Merchant'
 import AddAccount from './Components/AddAccount'
 import Statistics from './Components/Statistics'
+import SessionTimeoutHandler from './Components/SessionTimeoutHandler'
+import PayeeManager from './Components/PayeeManager'
 function App() {
   return (
     <BrowserRouter>
+      <SessionTimeoutHandler />
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
@@ -29,6 +32,7 @@ function App() {
         <Route path="/balance" element={<BalanceCheck />}></Route>
         <Route path="/history" element={<History />}></Route>
         <Route path="/qr" element={<QRGenerator />}></Route>
+        <Route path="/payees" element={<PayeeManager />}></Route>
         <Route path="/admin-portal" element={<AdminPanel />}></Route>
         <Route path="/merchant" element={<Merchant />}></Route>
         <Route path="/add/:number" element={<AddAccount />}></Route>

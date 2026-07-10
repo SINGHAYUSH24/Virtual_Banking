@@ -3,25 +3,79 @@
   justify-content: center;
   align-items: flex-start;
   padding: 48px 24px;
-  background-color: #F5F5F5;
+  background-color: #F8F9FA;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
 .wrapper {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   background-color: #FFFFFF;
   border: 1px solid #EAEAEA;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.headerTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1A1D20;
+  margin: 0;
+}
+.backBtn {
+  background: transparent;
+  border: 1px solid #E2E8F0;
+  color: #4A5568;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+.backBtn:hover {
+  background-color: #F7FAFC;
+  border-color: #CBD5E0;
+}
+.tabBar {
+  display: flex;
+  background-color: #EDF2F7;
+  padding: 4px;
+  margin: 16px 24px 0 24px;
+  border-radius: 8px;
+}
+.tabBtn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4A5568;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tabActive {
+  background-color: #FFFFFF;
+  color: #1A1D20;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
 .accountList {
-  max-height: 220px;
+  max-height: 180px;
   overflow-y: auto;
   border-bottom: 1px solid #EAEAEA;
+  margin: 16px 24px 0 24px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
 }
 .accountList::-webkit-scrollbar {
   width: 6px;
@@ -30,57 +84,79 @@
   background: transparent;
 }
 .accountList::-webkit-scrollbar-thumb {
-  background-color: #EAEAEA;
+  background-color: #E2E8F0;
   border-radius: 3px;
 }
 .accountItem {
-  padding: 16px 20px;
+  padding: 12px 16px;
   cursor: pointer;
   transition: background-color 200ms ease-out;
-  border-bottom: 1px solid #EAEAEA;
+  border-bottom: 1px solid #E2E8F0;
 }
 .accountItem:last-child {
   border-bottom: none;
 }
 .accountItem:hover {
-  background-color: #FAFAFA;
+  background-color: #F7FAFC;
 }
 .active {
-  background-color: #EAEAEA;
+  background-color: #EDF2F7;
 }
 .accountId {
   font-family: 'Space Mono', monospace;
-  font-size: 14px;
-  color: #111111;
+  font-size: 13px;
+  color: #2D3748;
   word-break: break-all;
   margin: 0;
   font-weight: 400;
   line-height: 1.5;
 }
 .emptyState {
-  padding: 48px 24px;
+  padding: 24px;
   text-align: center;
-  color: #888888;
+  color: #A0AEC0;
   font-size: 14px;
 }
 .qrDisplay {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px;
-  min-height: 240px;
+  padding: 24px;
+  min-height: 280px;
 }
 .qrPlaceholder {
   text-align: center;
-  color: #888888;
+  color: #718096;
 }
 .qrPlaceholder p {
   margin: 0;
   font-size: 14px;
-  max-width: 160px;
+  max-width: 220px;
 }
 .qrCodeWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   animation: fadeIn 200ms ease-out forwards;
+}
+.scanContainer {
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+.scanBox {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  background: #F7FAFC;
+}
+.scanInstructions {
+  font-size: 13px;
+  color: #718096;
+  text-align: center;
+  margin-top: 12px;
 }
 @keyframes fadeIn {
   from {
